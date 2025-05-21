@@ -27,20 +27,35 @@ const autor_id = ref('')
 const autores = ref([])
 
 const cargarAutores = async () => {
-  const res = await autorService.getAll()
-  autores.value = res.data
+  try {
+    const res = await autorService.getAll()
+    autores.value = res.data
+  } catch (error) {
+    console.error('Error al cargar autores:', error)
+    alert('No se pudieron cargar los autores.')
+  }
 }
 
 const guardarLibro = async () => {
-  if (!titulo.value || !genero.value || !autor_id.value) return
-  await libroService.create({
-    titulo: titulo.value,
-    genero: genero.value,
-    autor_id: autor_id.value
-  })
-  titulo.value = ''
-  genero.value = ''
-  autor_id.value = ''
+  try {
+    if (!titulo.value || !genero.value || !autor_id.value) {
+      alert('Todos los campos son obligatorios')
+      return
+    }
+
+    await libroService.create({
+      titulo: titulo.value,
+      genero: genero.value,
+      autor_id: autor_id.value
+    })
+
+    titulo.value = ''
+    genero.value = ''
+    autor_id.value = ''
+  } catch (error) {
+    console.error('Error al guardar libro:', error)
+    alert('Error al guardar el libro. Revisa la consola.')
+  }
 }
 
 onMounted(cargarAutores)
