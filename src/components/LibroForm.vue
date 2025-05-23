@@ -26,6 +26,7 @@ const genero = ref('')
 const autor_id = ref('')
 const autores = ref([])
 
+  // Función para cargar la lista de autores
 const cargarAutores = async () => {
   try {
     const res = await autorService.getAll()
@@ -36,6 +37,7 @@ const cargarAutores = async () => {
   }
 }
 
+  // Función para guardar un nuevo libro
 const guardarLibro = async () => {
   try {
     if (!titulo.value || !genero.value || !autor_id.value) {
@@ -52,6 +54,8 @@ const guardarLibro = async () => {
     titulo.value = ''
     genero.value = ''
     autor_id.value = ''
+
+    //Manejo de errores
   } catch (error) {
     console.error('Error al guardar libro:', error)
     alert('Error al guardar el libro. Revisa la consola.')

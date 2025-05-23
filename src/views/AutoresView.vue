@@ -12,6 +12,7 @@ import api from '@/api'
 
 const autores = ref([])
 
+  // Función para obtener la lista de autores
 const obtenerAutores = async () => {
   const response = await api.get('/autores')
   autores.value = response.data

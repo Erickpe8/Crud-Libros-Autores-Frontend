@@ -13,11 +13,13 @@ import api from '@/api'
 const libros = ref([])
 const autores = ref([])
 
+  // Función para obtener la lista de libros
 const obtenerLibros = async () => {
   const response = await api.get('/libros')
   libros.value = response.data
 }
 
+  // Función para obtener la lista de autores
 const obtenerAutores = async () => {
   const response = await api.get('/autores')
   autores.value = response.data

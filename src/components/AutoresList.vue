@@ -1,72 +1,77 @@
 <template>
   <div>
-    <h2>Lista de Libros</h2>
+    <h2>Lista de Autores</h2>
     <ul>
-      <li v-for="libro in libros" :key="libro.id">
-        {{ libro.titulo }} - Género: {{ libro.genero }} - Autor ID: {{ libro.autor_id }}
-        <button @click="eliminarLibro(libro.id)">Eliminar</button>
-        <button @click="editarLibro(libro)">Editar</button>
+      <li v-for="autor in autores" :key="autor.id">
+        {{ autor.nombre }} {{ autor.apellido }} - Número de libros: {{ autor.libros.length }}
+        <button @click="editarAutor(autor)">Editar</button>
+        <button @click="eliminarAutor(autor.id)">Eliminar</button>
       </li>
     </ul>
 
-    <div v-if="libroEditando">
-      <h3>Editar Libro</h3>
-      <input v-model="libroEditando.titulo" placeholder="Título" />
-      <input v-model="libroEditando.genero" placeholder="Género" />
-      <button @click="guardarEdicion">Guardar</button>
-      <button @click="cancelarEdicion">Cancelar</button>
-    </div>
+    <div v-if="autorEditando">
+  <h3>Editar Autor</h3>
+  <input v-model="autorEditando.nombre" placeholder="Nombre" />
+  <input v-model="autorEditando.apellido" placeholder="Apellido" />
+  <button @click="guardarEdicion">Guardar</button>
+  <button @click="cancelarEdicion">Cancelar</button>
+</div>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import libroService from '@/services/libroService'
+import autorService from '@/services/autorService'
 
-const libros = ref([])
-const libroEditando = ref(null)
+  // Importa el servicio de autores
+const autores = ref([])
+const autorEditando = ref(null)
 
-const cargarLibros = async () => {
+  // Función para cargar la lista de autores
+const cargarAutores = async () => {
   try {
-    const res = await libroService.getAll()
-    console.log('Libros recibidos:', res.data)
-    libros.value = res.data
+    const res = await autorService.getAll() 
+    autores.value = res.data
+
   } catch (error) {
-    console.error('Error al cargar libros:', error)
+    console.error('Error al cargar autores:', error)
   }
 }
 
-const eliminarLibro = async (id) => {
-  try {
-    await libroService.delete(id)
-    console.log('Libro eliminado, actualizando lista...')
-    await cargarLibros()
-  } catch (error) {
-    console.error('Error al eliminar el libro:', error)
-  }
+  // Función para eliminar un autor
+const editarAutor = (autor) => {
+  autorEditando.value = { ...autor }
 }
 
-const editarLibro = (libro) => {
-  libroEditando.value = { ...libro }
-}
-
+  // Función para guardar la edición de un autor
 const guardarEdicion = async () => {
   try {
-    await libroService.update(libroEditando.value.id, {
-      titulo: libroEditando.value.titulo,
-      genero: libroEditando.value.genero,
-      autor_id: libroEditando.value.autor_id,
+    await autorService.update(autorEditando.value.id, {
+      nombre: autorEditando.value.nombre,
+      apellido: autorEditando.value.apellido
     })
-    libroEditando.value = null
-    await cargarLibros()
+    autorEditando.value = null
+    await cargarAutores()
   } catch (error) {
-    console.error('Error al guardar el libro:', error)
+    console.error('Error al actualizar autor:', error)
   }
 }
 
-const cancelarEdicion = () => {
-  libroEditando.value = null
+  // Función para cancelar la edición de un autor
+const cancelarEdicion = () => { 
+  autorEditando.value = null
 }
 
-onMounted(cargarLibros)
+  // Función para eliminar un autor
+const eliminarAutor = async (id) => {
+  try {
+    await autorService.delete(id)
+    await cargarAutores()
+  } catch (error) {
+    console.error('Error al eliminar autor:', error)
+  }
+}
+
+onMounted(cargarAutores)
 </script>

@@ -27,6 +27,7 @@ import libroService from '@/services/libroService'
 const libros = ref([])
 const libroEditando = ref(null)
 
+  // Función para cargar la lista de libros
 const cargarLibros = async () => {
   try {
     const res = await libroService.getAll()
@@ -37,6 +38,7 @@ const cargarLibros = async () => {
   }
 }
 
+  // Función para eliminar un libro
 const eliminarLibro = async (id) => {
   try {
     await libroService.delete(id)
@@ -47,10 +49,12 @@ const eliminarLibro = async (id) => {
   }
 }
 
+  // Función para editar un libro
 const editarLibro = (libro) => {
   libroEditando.value = { ...libro }
 }
 
+  // Función para guardar la edición de un libro
 const guardarEdicion = async () => {
   try {
     console.log('Editando libro ID:', libroEditando.value.id)
@@ -61,6 +65,8 @@ const guardarEdicion = async () => {
     })
     libroEditando.value = null
     await cargarLibros()
+
+  //Manejo de errores en caso de haber alguno
   } catch (error) {
     if (error.response) {
       console.error('Error al guardar la edición:', error.response.data)
@@ -72,6 +78,7 @@ const guardarEdicion = async () => {
   }
 }
 
+  // Función para cancelar la edición de un libro
 const cancelarEdicion = () => {
   libroEditando.value = null
 }
