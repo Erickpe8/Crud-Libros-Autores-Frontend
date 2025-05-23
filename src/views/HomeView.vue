@@ -1,9 +1,8 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>
+  <Nav/>
+  </div>
 </template>
+<script setup>
+import Nav from '../components/Nav_principal_menu.vue'
+</script>
